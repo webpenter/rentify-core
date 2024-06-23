@@ -12,5 +12,5 @@
  * @subpackage Rentify_Core/public/partials
  */
 ?>
-
-<!-- This file should primarily consist of HTML with a little bit of PHP. -->
+<h3>Here we will show React app UI.</h3>
+<div id="root"></div>

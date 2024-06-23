@@ -78,6 +78,7 @@ class Rentify_Core {
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
+		$this->define_public_api_routes();
 
 	}
 
@@ -90,6 +91,7 @@ class Rentify_Core {
 	 * - Rentify_Core_i18n. Defines internationalization functionality.
 	 * - Rentify_Core_Admin. Defines all hooks for the admin area.
 	 * - Rentify_Core_Public. Defines all hooks for the public side of the site.
+	 * - Rentify_API. The class responsible for defining all api endpoint.
 	 *
 	 * Create an instance of the loader which will be used to register the hooks
 	 * with WordPress.
@@ -98,6 +100,24 @@ class Rentify_Core {
 	 * @access   private
 	 */
 	private function load_dependencies() {
+
+        /**
+         * The helpers for rentify plugin
+         * side of the site.
+         */
+        require_once plugin_dir_path(__DIR__) . 'helpers.php';
+
+        /**
+         * The configuration for rentify plugin
+         * side of the site.
+         */
+        require_once plugin_dir_path(__DIR__) . 'config.php';
+
+        /**
+         * The class responsible for performing all DB functions
+         * side of the site.
+         */
+        require_once plugin_dir_path(__DIR__) . 'includes/db/class-rentify-db.php';
 
 		/**
 		 * The class responsible for orchestrating the actions and filters of the
@@ -121,6 +141,12 @@ class Rentify_Core {
 		 * side of the site.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-rentify-core-public.php';
+
+		/**
+		 * The class responsible for defining all api endpoints
+		 * side of the site.
+		 */
+        require_once plugin_dir_path(__DIR__) . 'api/class-rentify-api.php';
 
 		$this->loader = new Rentify_Core_Loader();
 
@@ -172,6 +198,21 @@ class Rentify_Core {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+
+	}
+
+    /**
+	 * Register all of the routes related to the public-facing API functionality
+	 * of the plugin.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 */
+	private function define_public_api_routes() {
+
+		$plugin_public = new Rentify_Api();
+
+		$this->loader->add_action( 'rest_api_init', $plugin_public, 'register_routes' );
 
 	}
 

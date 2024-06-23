@@ -20,17 +20,20 @@
  * @subpackage Rentify_Core/includes
  * @author     WebPenter <sales@webpenter.com>
  */
-class Rentify_Core_Activator {
+class Rentify_Core_Activator
+{
+    /**
+     * Short Description. (use period)
+     *
+     * Long Description.
+     *
+     * @since    1.0.0
+     */
+    public static function activate()
+    {
 
-	/**
-	 * Short Description. (use period)
-	 *
-	 * Long Description.
-	 *
-	 * @since    1.0.0
-	 */
-	public static function activate() {
-
-	}
+        require_once plugin_dir_path( __FILE__ ) . 'db/db-tables.php';
+        rentify_create_table();
+    }
 
 }

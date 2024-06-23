@@ -74,6 +74,7 @@ class Rentify_Core_Admin {
 		 */
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/rentify-core-admin.css', array(), $this->version, 'all' );
+        wp_enqueue_style('rentify-react-ui', plugin_dir_url(__FILE__) . 'rentify-react-ui/build/static/css/main.css', array(), '1.0.0');
 
 	}
 
@@ -97,6 +98,7 @@ class Rentify_Core_Admin {
 		 */
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/rentify-core-admin.js', array( 'jquery' ), $this->version, false );
+        wp_enqueue_script('rentify-react-ui', plugin_dir_url(__FILE__) . 'rentify-react-ui/build/static/js/main.js', array(), '1.0.0', true);
 
 	}
 
