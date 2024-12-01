@@ -5,14 +5,6 @@ function rentify_create_table()
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     $DROP_TABLES = 1;
     if($DROP_TABLES == 1 && 1==2){
-        $table_name = $wpdb->prefix . $rentify_db_prefix . 'amenities';
-        dbDelta("DROP TABLE $table_name");
-
-        $table_name = $wpdb->prefix . $rentify_db_prefix . 'facilities';
-        dbDelta("DROP TABLE $table_name");
-
-        $table_name = $wpdb->prefix . $rentify_db_prefix . 'addresses';
-        dbDelta("DROP TABLE $table_name");
 
         $table_name = $wpdb->prefix . $rentify_db_prefix . 'countries';
         dbDelta("DROP TABLE $table_name");
@@ -35,53 +27,10 @@ function rentify_create_table()
         $table_name = $wpdb->prefix . $rentify_db_prefix . 'cancel_policies';
         dbDelta("DROP TABLE $table_name");
 
+        $table_name = $wpdb->prefix . $rentify_db_prefix . 'icon_vendors';
+        dbDelta("DROP TABLE $table_name");
+
     }
-
-    $table_name = $wpdb->prefix . $rentify_db_prefix . 'amenities';
-    $charset_collate = $wpdb->get_charset_collate();
-
-    $sql = "CREATE TABLE $table_name (
-     id INT(11) NOT NULL AUTO_INCREMENT,
-        subject_type ENUM ('listing','experience') DEFAULT 'listing',
-        name VARCHAR(255),
-        slug VARCHAR(255) NOT NULL,
-        number_of_guests INT(11),
-        number_of_beds INT(11),
-        bed_type INT(11),
-        PRIMARY KEY (id)
-    ) $charset_collate;";
-
-    dbDelta($sql);
-
-    $table_name = $wpdb->prefix . $rentify_db_prefix . 'facilities';
-    $charset_collate = $wpdb->get_charset_collate();
-
-    $sql = "CREATE TABLE $table_name (
-     id INT(11) NOT NULL AUTO_INCREMENT,
-        subject_type ENUM ('listing','experience') DEFAULT 'listing',
-        name VARCHAR(255),
-        slug VARCHAR(255) NOT NULL,
-        description TEXT,
-        PRIMARY KEY (id)
-    ) $charset_collate;";
-
-    dbDelta($sql);
-
-    // Addresses => countries, states, cities, areas
-    $table_name = $wpdb->prefix . $rentify_db_prefix . 'addresses';
-    $charset_collate = $wpdb->get_charset_collate();
-
-    $sql = "CREATE TABLE $table_name (
-        id INT(11) NOT NULL AUTO_INCREMENT,
-        full_address VARCHAR(255) NOT NULL,
-        short_address VARCHAR(255) NOT NULL,
-        listing_id INT(11) NOT NULL,
-        lattitude FLOAT(11) NOT NULL,
-        longitude FLOAT(11) NOT NULL,
-        PRIMARY KEY (id)
-    ) $charset_collate;";
-
-    dbDelta($sql);
 
     $table_name = $wpdb->prefix . $rentify_db_prefix . 'countries';
     $charset_collate = $wpdb->get_charset_collate();
@@ -107,38 +56,51 @@ function rentify_create_table()
     $table_name = $wpdb->prefix . $rentify_db_prefix . 'states';
     $charset_collate = $wpdb->get_charset_collate();
 
-    $sql = "CREATE TABLE $table_name (
+    $sql = "CREATE TABLE {$table_name} (
         id INT(11) NOT NULL AUTO_INCREMENT,
         name VARCHAR(255) NOT NULL,
         country_id INT(11) NOT NULL,
         PRIMARY KEY (id),
-        FOREIGN KEY (country_id) REFERENCES ". $wpdb->prefix . $rentify_db_prefix . 'countries'."(id)
-    ) $charset_collate;";
+        FOREIGN KEY (country_id) REFERENCES {$wpdb->prefix}{$rentify_db_prefix}countries(id)
+    ) {$charset_collate};";
 
     dbDelta($sql);
 
     $table_name = $wpdb->prefix . $rentify_db_prefix . 'cities';
     $charset_collate = $wpdb->get_charset_collate();
 
-    $sql = "CREATE TABLE $table_name (
+    $sql = "CREATE TABLE {$table_name} (
         id INT(11) NOT NULL AUTO_INCREMENT,
         name VARCHAR(255) NOT NULL,
         state_id INT(11) NOT NULL,
         PRIMARY KEY (id),
-        FOREIGN KEY (state_id) REFERENCES ". $wpdb->prefix . $rentify_db_prefix . 'states'."(id)
-    ) $charset_collate;";
+        FOREIGN KEY (state_id) REFERENCES {$wpdb->prefix}{$rentify_db_prefix}states(id)
+    ) {$charset_collate};";
 
     dbDelta($sql);
 
     $table_name = $wpdb->prefix . $rentify_db_prefix . 'areas';
     $charset_collate = $wpdb->get_charset_collate();
 
-    $sql = "CREATE TABLE $table_name (
+    $sql = "CREATE TABLE {$table_name} (
         id INT(11) NOT NULL AUTO_INCREMENT,
         name VARCHAR(255) NOT NULL,
         city_id INT(11) NOT NULL,
         PRIMARY KEY (id),
-        FOREIGN KEY (city_id) REFERENCES ". $wpdb->prefix . $rentify_db_prefix . 'cities'."(id)
+        FOREIGN KEY (city_id) REFERENCES {$wpdb->prefix}{$rentify_db_prefix}cities(id)
+    ) {$charset_collate};";
+
+
+    dbDelta($sql);
+
+    $table_name = $wpdb->prefix . $rentify_db_prefix . 'icon_vendors';
+    $charset_collate = $wpdb->get_charset_collate();
+
+    $sql = "CREATE TABLE $table_name (
+        id INT(11) NOT NULL AUTO_INCREMENT,
+        name VARCHAR(255) NOT NULL,
+        default_icon_vendor ENUM('yes', 'no') DEFAULT 'no',
+        PRIMARY KEY (id)
     ) $charset_collate;";
 
     dbDelta($sql);
